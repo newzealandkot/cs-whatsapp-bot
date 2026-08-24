@@ -26,5 +26,6 @@ def test_bot_can_return_message():
 def test_can_message_only_active_bot():
     bot = Bot()
     bot.is_active = False
-    with pytest.raises(BotInactiveError):
+    exc_message = "Bot is inactive, call 'start' method to activate bot"
+    with pytest.raises(BotInactiveError, match=exc_message):
         bot.message()

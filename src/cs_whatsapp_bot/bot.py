@@ -19,4 +19,4 @@ class Bot:
     def message(self):
         if self.is_active:
             return MESSAGE
-        raise BotInactiveError()
+        raise BotInactiveError("Bot is inactive, call 'start' method to activate bot")
