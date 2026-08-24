@@ -1,5 +1,5 @@
 import pytest
-from src.cs_whatsapp_bot.main import Bot, BotInactiveError, MESSAGE
+from src.cs_whatsapp_bot.bot import Bot, BotInactiveError, MESSAGE
 
 
 def test_can_start_bot():
