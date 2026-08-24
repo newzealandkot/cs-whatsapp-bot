@@ -1,15 +1,7 @@
-import whatsapp_cloud_api
-
-
 class Bot:
 
-    async def answer(self, message: str) -> Response:
-        return Response('I am bot')
+    def __init__(self):
+        self.is_active = False
 
-
-class Response:
-
-    def __init__(self, text: str) -> None:
-        self.text = text
-
-
+    def start(self):
+        self.is_active = True
