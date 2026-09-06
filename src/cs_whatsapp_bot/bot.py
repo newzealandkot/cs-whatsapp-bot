@@ -1,22 +1,11 @@
 MESSAGE = "Welcome to Climate Service!"
 
 
-class BotInactiveError(Exception):
-    """Raised when bot is inactive"""
-
-
 class Bot:
+    message = MESSAGE
 
-    def __init__(self):
-        self.is_active = False
+    def __init__(self, sender):
+        self.sender = sender
 
-    def start(self):
-        self.is_active = True
-
-    def stop(self):
-        self.is_active = False
-
-    def message(self):
-        if self.is_active:
-            return MESSAGE
-        raise BotInactiveError("Bot is inactive, call 'start' method to activate bot")
+    def send_message(self):
+        self.sender.send(self.message)
