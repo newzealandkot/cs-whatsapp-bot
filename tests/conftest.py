@@ -1,19 +1,29 @@
-# import threading
-#
-# import pytest
-# import uvicorn
-#
-# from
-#
-#
-# @pytest.fixture(scope="session")
-# def uvicorn_server():
-#     config = uvicorn.Config(app)
-#     server = uvicorn.Server(config)
-#
-#     thread = threading.Thread(target=server.run, daemon=True)
-#     thread.start()
-#
-#     yield server
+from http import HTTPMethod
+
+import pytest
+import pytest_httpserver as server
 
 
+HTTPSERVER_HOST_PORT = ("localhost", 4000)
+
+
+@pytest.fixture(scope="session")
+def httpserver_listen_address():
+    return HTTPSERVER_HOST_PORT
+
+
+@pytest.fixture
+def remote_uri():
+    return "/remote"
+
+
+@pytest.fixture
+def test_server(httpserver, remote_uri):
+    httpserver.expect_request(
+        remote_uri,
+        method=HTTPMethod.POST,
+    ).respond_with_json({})
+    yield httpserver.host, httpserver.port
+    httpserver.assert_request_made(
+        server.RequestMatcher(remote_uri, method=HTTPMethod.POST)
+    )

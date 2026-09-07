@@ -1,13 +1,16 @@
 import fastapi
 
+from .bot import Bot
+from .senders import HTTPX2Sender
 
 app = fastapi.FastAPI()
 
 
 @app.post("/reply")
 async def reply():
-    pass
-
+    sender = HTTPX2Sender("localhost", 4000)
+    bot = Bot(sender)
+    await bot.send_message()
 
 # import os
 #

@@ -7,5 +7,5 @@ class Bot:
     def __init__(self, sender):
         self.sender = sender
 
-    def send_message(self):
-        self.sender.send(self.message)
+    async def send_message(self):
+        await self.sender.send(self.message)

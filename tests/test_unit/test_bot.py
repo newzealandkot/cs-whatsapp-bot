@@ -1,4 +1,5 @@
 import pytest
+
 from src.cs_whatsapp_bot import FakeMessageSender, Bot, MESSAGE
 
 
@@ -6,12 +7,13 @@ def test_bot_has_message():
     assert Bot.message == MESSAGE
 
 
-def test_bot_can_send_message():
+@pytest.mark.anyio
+async def test_bot_can_send_message():
     sender = FakeMessageSender()
     total_messages = sender.total_messages
     total_messages_after = total_messages + 1
     bot = Bot(sender)
-    bot.send_message()
+    await bot.send_message()
     assert sender.total_messages == total_messages_after
 
 
