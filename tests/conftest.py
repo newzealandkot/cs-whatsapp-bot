@@ -1,7 +1,8 @@
 from http import HTTPMethod
 
 import pytest
-import pytest_httpserver as server
+
+from src.cs_whatsapp_bot import FORM
 
 
 HTTPSERVER_HOST_PORT = ("localhost", 4000)
@@ -18,12 +19,36 @@ def remote_uri():
 
 
 @pytest.fixture
-def test_server(httpserver, remote_uri):
-    httpserver.expect_request(
-        remote_uri,
-        method=HTTPMethod.POST,
-    ).respond_with_json({})
-    yield httpserver.host, httpserver.port
-    httpserver.assert_request_made(
-        server.RequestMatcher(remote_uri, method=HTTPMethod.POST)
-    )
+def recipient():
+    return "0123456789"
+
+
+@pytest.fixture
+def expected_payload(recipient):
+    expected_payload = {
+        "messaging_product": "whatsapp",
+        "recipient_type": "individual",
+        "to": recipient,
+        "type": "text",
+        "text": {
+            "preview_url": False,
+            "body": FORM,
+        },
+    }
+    return expected_payload
+
+
+@pytest.fixture
+def request_options(expected_payload, remote_uri):
+    request_options = {
+        "uri": remote_uri,
+        "method": HTTPMethod.POST,
+        "json": expected_payload,
+    }
+    return request_options
+
+
+@pytest.fixture
+def test_server(httpserver, request_options):
+    httpserver.expect_request(**request_options).respond_with_json({})
+    return httpserver

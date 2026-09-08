@@ -20,5 +20,5 @@ class HTTPX2Sender:
     async def send(self, payload):
         url = f"http://{self.host}:{self.port}/remote"
         async with httpx2.AsyncClient() as client:
-            await client.post(url)
+            await client.post(url, json=payload)
         self.total_messages += 1

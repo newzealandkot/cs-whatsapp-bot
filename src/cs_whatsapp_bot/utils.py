@@ -1,4 +1,4 @@
-def make_whatsapp_message_payload(recipient, body):
+def make_whatsapp_message_payload(*, recipient, body):
     payload = {
         "messaging_product": "whatsapp",
         "recipient_type": "individual",
