@@ -2,7 +2,7 @@ import fastapi
 
 from .bot import Bot
 from .senders import HTTPX2Sender
-from .utils import make_whatsapp_message_payload
+
 
 app = fastapi.FastAPI()
 

@@ -1,4 +1,4 @@
-from .utils import make_whatsapp_message_payload
+from . import utils
 
 
 FORM = "Please fill out this form:"
@@ -11,5 +11,5 @@ class Bot:
         self.sender = sender
 
     async def send_message(self, recipient):
-        payload = make_whatsapp_message_payload(body=self.FORM, recipient=recipient)
+        payload = utils.make_whatsapp_message_payload(body=self.FORM, recipient=recipient)
         await self.sender.send(payload)

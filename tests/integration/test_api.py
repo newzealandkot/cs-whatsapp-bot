@@ -12,6 +12,6 @@ client = testclient.TestClient(app)
 
 
 @pytest.mark.anyio
-async def test_reply_endpoint_sends_post_to_remote_server(request_options, test_server):
+async def test_reply_endpoint_sends_post_to_remote_server(env_token, request_options, test_server):
     client.post(REPLY_URL)
     test_server.assert_request_made(server.RequestMatcher(**request_options))

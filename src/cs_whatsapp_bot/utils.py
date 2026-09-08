@@ -1,3 +1,11 @@
+import os
+
+from dotenv import load_dotenv
+
+
+load_dotenv()
+
+
 def make_whatsapp_message_payload(*, recipient, body):
     payload = {
         "messaging_product": "whatsapp",
@@ -10,3 +18,12 @@ def make_whatsapp_message_payload(*, recipient, body):
         },
     }
     return payload
+
+
+def make_headers_from_env():
+    token = os.getenv("WHATSAPP_ACCESS_TOKEN")
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json",
+    }
+    return headers

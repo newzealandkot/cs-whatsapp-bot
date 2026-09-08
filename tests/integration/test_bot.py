@@ -5,7 +5,7 @@ from src.cs_whatsapp_bot import Bot, HTTPX2Sender
 
 
 @pytest.mark.anyio
-async def test_bot_can_send_message_to_remote_server(recipient, request_options, test_server):
+async def test_bot_can_send_message_to_remote_server(env_token, recipient, request_options, test_server):
     sender = HTTPX2Sender(host=test_server.host, port=test_server.port)
     bot = Bot(sender)
     await bot.send_message(recipient)
