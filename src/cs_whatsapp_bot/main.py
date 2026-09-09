@@ -36,3 +36,43 @@ response = httpx2.post(
 
 print(response.status_code)
 print(response.json())
+
+incoming_request = {
+  "object": "whatsapp_business_account",
+  "entry": [
+    {
+      "id": "YOUR_WABA_ID",
+      "changes": [
+        {
+          "field": "messages",
+          "value": {
+            "messaging_product": "whatsapp",
+            "metadata": {
+              "display_phone_number": "15550000000",
+              "phone_number_id": "YOUR_PHONE_NUMBER_ID"
+            },
+            "contacts": [
+              {
+                "profile": {
+                  "name": "John"
+                },
+                "wa_id": "77001234567"
+              }
+            ],
+            "messages": [
+              {
+                "from": "77001234567",
+                "id": "wamid.HBgL...",
+                "timestamp": "1720000000",
+                "text": {
+                  "body": "Привет!"
+                },
+                "type": "text"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

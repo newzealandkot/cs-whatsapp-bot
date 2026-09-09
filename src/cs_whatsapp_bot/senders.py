@@ -20,7 +20,7 @@ class HTTPX2Sender:
         self.total_messages = 0
 
     async def send(self, payload):
-        url = f"http://{self.host}:{self.port}/remote"
+        url = f"http://{self.host}:{self.port}/remote"    # hardcode
         headers = utils.make_headers_from_env()
         async with httpx2.AsyncClient() as client:
             await client.post(url, json=payload, headers=headers)

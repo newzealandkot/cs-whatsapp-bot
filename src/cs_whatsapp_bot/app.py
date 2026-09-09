@@ -1,7 +1,7 @@
 import fastapi
 
-from .bot import Bot
-from .senders import HTTPX2Sender
+from . import bot
+from . import senders
 
 
 app = fastapi.FastAPI()
@@ -9,10 +9,10 @@ app = fastapi.FastAPI()
 
 @app.post("/reply")
 async def reply():
-    sender = HTTPX2Sender("localhost", 4000)
-    bot = Bot(sender)
-    recipient = "0123456789"
-    await bot.send_message(recipient)
+    sender = senders.HTTPX2Sender("localhost", 4000) # hardcode
+    whatsapp_bot = bot.Bot(sender)
+    recipient = "0123456789"  # hardcode
+    await whatsapp_bot.send_message(recipient)
 
 # import os
 #
