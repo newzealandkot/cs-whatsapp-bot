@@ -6,11 +6,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-def make_whatsapp_message_payload(*, recipient, body):
+def build_payload_from_event(*, event, body):
+    sender_number = event.entry[0].changes[0].value.messages[0].from_
     payload = {
         "messaging_product": "whatsapp",
         "recipient_type": "individual",
-        "to": f"{recipient}",
+        "to": f"{sender_number}",
         "type": "text",
         "text": {
             "preview_url": False,

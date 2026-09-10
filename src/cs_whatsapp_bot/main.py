@@ -37,6 +37,17 @@ response = httpx2.post(
 print(response.status_code)
 print(response.json())
 
+
+reply_template = {
+    "messaging_product": "whatsapp",
+    "to": "77001234567",
+    "type": "text",
+    "text": {
+        "body": "Привет! Получил твоё сообщение."
+    }
+}
+
+
 incoming_request = {
   "object": "whatsapp_business_account",
   "entry": [

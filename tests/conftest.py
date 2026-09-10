@@ -2,10 +2,11 @@ from http import HTTPMethod
 
 import pytest
 
-from src.cs_whatsapp_bot import FORM
+from src.cs_whatsapp_bot import FORM, WhatsAppWebhookEvent
 
 
 HTTPSERVER_HOST_PORT = ("localhost", 4000)
+TEST_SENDER_PHONE = "phone_number"
 
 
 @pytest.fixture(scope="session")
@@ -25,7 +26,7 @@ def remote_uri():
 
 @pytest.fixture
 def recipient():
-    return "0123456789"
+    return TEST_SENDER_PHONE
 
 
 @pytest.fixture
@@ -104,9 +105,9 @@ def text_payload():
 
 
 @pytest.fixture
-def message_payload(text_payload):
+def message_payload(recipient, text_payload):
     return {
-        "from": "phone_number",
+        "from": recipient,
         "id": "whatsapp_message_id",
         "timestamp": "seconds",
         "text": text_payload,
@@ -146,3 +147,7 @@ def webhook_payload(entry_payload):
         "object": "whatsapp_business_account",
         "entry": [entry_payload],
     }
+
+@pytest.fixture
+def webhook_event(webhook_payload):
+    return WhatsAppWebhookEvent.model_validate(webhook_payload)

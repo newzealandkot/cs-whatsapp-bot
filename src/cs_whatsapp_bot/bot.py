@@ -1,3 +1,4 @@
+from . import schemas
 from . import utils
 
 
@@ -10,6 +11,6 @@ class Bot:
     def __init__(self, sender):
         self.sender = sender
 
-    async def send_message(self, recipient):
-        payload = utils.make_whatsapp_message_payload(body=self.FORM, recipient=recipient)
+    async def send_message(self, event: schemas.WhatsAppWebhookEvent):
+        payload = utils.build_payload_from_event(body=self.FORM, event=event)
         await self.sender.send(payload)

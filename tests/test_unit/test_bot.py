@@ -8,12 +8,12 @@ def test_bot_has_message():
 
 
 @pytest.mark.anyio
-async def test_bot_can_send_message(expected_payload):
+async def test_bot_can_send_message(webhook_event):
     sender = FakeMessageSender()
     total_messages = sender.total_messages
     total_messages_after = total_messages + 1
     bot = Bot(sender)
-    await bot.send_message(expected_payload)
+    await bot.send_message(webhook_event)
     assert sender.total_messages == total_messages_after
 
 
