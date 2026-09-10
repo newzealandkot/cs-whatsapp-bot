@@ -25,3 +25,24 @@ class Message(pd.BaseModel):
     timestamp: str
     text: Text
     type: str
+
+
+class Value(pd.BaseModel):
+    messaging_product: str
+    metadata: Metadata
+    contacts: list[Contact]
+    messages: list[Message]
+
+
+class Change(pd.BaseModel):
+    field: str
+    value: Value
+
+class Entry(pd.BaseModel):
+    id: str
+    changes: list[Change]
+
+
+class WhatsAppWebhookEvent(pd.BaseModel):
+    object: str
+    entry: list[Entry]

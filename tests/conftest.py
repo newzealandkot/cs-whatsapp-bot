@@ -67,3 +67,82 @@ def request_options(expected_headers, expected_payload, remote_uri):
 def test_server(httpserver, request_options):
     httpserver.expect_request(**request_options).respond_with_json({})
     return httpserver
+
+
+@pytest.fixture(params=[
+    {},
+    {"invalid_field": "string"},
+])
+def bad_payload(request):
+    return request.param
+
+
+@pytest.fixture
+def profile_payload():
+    return {"name": "some_name"}
+
+
+@pytest.fixture
+def contact_payload(profile_payload):
+    return {
+        "profile": profile_payload,
+        "wa_id": "whatsapp_id",
+    }
+
+
+@pytest.fixture
+def metadata_payload():
+    return {
+        "display_phone_number": "phone_number",
+        "phone_number_id": "number_id",
+    }
+
+
+@pytest.fixture
+def text_payload():
+    return {"body": "message"}
+
+
+@pytest.fixture
+def message_payload(text_payload):
+    return {
+        "from": "phone_number",
+        "id": "whatsapp_message_id",
+        "timestamp": "seconds",
+        "text": text_payload,
+        "type": "text",
+    }
+
+
+@pytest.fixture
+def value_payload(contact_payload, message_payload, metadata_payload):
+    return {
+        "messaging_product": "whatsapp",
+        "metadata": metadata_payload,
+        "contacts": [contact_payload],
+        "messages": [message_payload],
+    }
+
+
+@pytest.fixture
+def change_payload(value_payload):
+    return {
+        "field": "messages",
+        "value": value_payload,
+    }
+
+
+@pytest.fixture
+def entry_payload(change_payload):
+    return {
+        "id": "your_waba_id",
+        "changes": [change_payload],
+    }
+
+
+@pytest.fixture
+def webhook_payload(entry_payload):
+    return {
+        "object": "whatsapp_business_account",
+        "entry": [entry_payload],
+    }
