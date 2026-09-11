@@ -1,3 +1,4 @@
+import sqlite3
 from http import HTTPMethod
 
 import pytest
@@ -12,6 +13,20 @@ TEST_SENDER_PHONE = "phone_number"
 @pytest.fixture(scope="session")
 def httpserver_listen_address():
     return HTTPSERVER_HOST_PORT
+
+
+@pytest.fixture
+def sqlite_session():
+    conn = sqlite3.connect(":memory:")
+    create_table_phones = """
+        CREATE TABLE phones (
+            id INTEGER PRIMARY KEY,
+            phone TEXT NOT NULL UNIQUE
+        )
+        """
+    conn.execute(create_table_phones)
+    yield conn
+    conn.close()
 
 
 @pytest.fixture
