@@ -8,9 +8,12 @@ FORM = "Please fill out this form:"
 class Bot:
     FORM = FORM
 
-    def __init__(self, sender):
+    def __init__(self, repository, sender):
+        self.repo = repository
         self.sender = sender
 
     async def send_message(self, event: schemas.WhatsAppWebhookEvent):
-        payload = utils.build_payload_from_event(body=self.FORM, event=event)
-        await self.sender.send(payload)
+        contact = utils.extract_contact_from_event(event)
+        if self.repo.get(contact) is None:
+            payload = utils.build_output_payload(body=self.FORM, contact=contact)
+            await self.sender.send(payload)

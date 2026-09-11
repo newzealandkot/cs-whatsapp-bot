@@ -1,9 +1,13 @@
 from src.cs_whatsapp_bot import FORM, utils, WhatsAppWebhookEvent
 
 
-def test_build_payload_from_event(expected_payload, webhook_payload):
-    event = WhatsAppWebhookEvent.model_validate(webhook_payload)
-    payload = utils.build_payload_from_event(event=event, body=FORM)
+def test_extract_contact_from_event(recipient, webhook_event):
+    contact = utils.extract_contact_from_event(webhook_event)
+    assert contact == recipient
+
+
+def test_build_output_payload(expected_payload, recipient):
+    payload = utils.build_output_payload(contact=recipient, body=FORM)
     assert payload == expected_payload
 
 
