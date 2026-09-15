@@ -26,6 +26,16 @@ async def test_no_message_from_bot_for_known_contact(recipient, webhook_event):
     assert sender.total_messages == 0
 
 
+@pytest.mark.anyio
+async def test_bot_sends_message_only_once_even_if_same_contact_writes_again(webhook_event):
+    repo = FakeRepository()
+    sender = FakeMessageSender()
+    bot = Bot(repo, sender)
+    await bot.send_message(webhook_event)
+    await bot.send_message(webhook_event)
+    assert sender.total_messages == 1
+
+
 # @pytest.fixture
 # def bot():
 #     return Bot()

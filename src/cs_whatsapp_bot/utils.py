@@ -1,10 +1,5 @@
 import os
 
-from dotenv import load_dotenv
-
-
-load_dotenv()
-
 
 def extract_contact_from_event(event):
     return event.entry[0].changes[0].value.messages[0].from_
@@ -31,3 +26,15 @@ def make_headers_from_env():
         "Content-Type": "application/json",
     }
     return headers
+
+
+def create_phones_table_if_not_exist(conn):
+    create_table_phones = """
+            CREATE TABLE IF NOT EXISTS phones (
+                id INTEGER PRIMARY KEY,
+                phone TEXT NOT NULL UNIQUE
+            )
+            """
+    conn.execute(create_table_phones)
+    conn.commit()
+    # conn.close()

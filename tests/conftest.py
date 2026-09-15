@@ -17,7 +17,7 @@ def httpserver_listen_address():
 
 @pytest.fixture
 def sqlite_session():
-    conn = sqlite3.connect(":memory:")
+    conn = sqlite3.connect(":memory:", check_same_thread=False)
     create_table_phones = """
         CREATE TABLE phones (
             id INTEGER PRIMARY KEY,
@@ -81,7 +81,7 @@ def request_options(expected_headers, expected_payload, remote_uri):
 
 @pytest.fixture
 def test_server(httpserver, request_options):
-    httpserver.expect_request(**request_options).respond_with_json({})
+    httpserver.expect_request(**request_options).respond_with_data("OK")
     return httpserver
 
 

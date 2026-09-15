@@ -17,3 +17,4 @@ class Bot:
         if self.repo.get(contact) is None:
             payload = utils.build_output_payload(body=self.FORM, contact=contact)
             await self.sender.send(payload)
+            self.repo.add(contact)

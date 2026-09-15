@@ -32,6 +32,7 @@ class SQLiteRepository:
             "INSERT INTO phones (phone) VALUES (?)",
             (phone,),
         )
+        self.conn.commit()
 
     def get(self, phone):
         cursor = self.conn.execute(

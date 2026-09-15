@@ -1,4 +1,4 @@
-from .app import app
+from .app import app, get_bot
 from .bot import Bot, FORM
 from .repositories import FakeConnection, FakeRepository, SQLiteRepository
 from .schemas import (Change, Contact, Entry, Message,
