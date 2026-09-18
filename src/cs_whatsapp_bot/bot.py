@@ -2,7 +2,19 @@ from . import schemas
 from . import utils
 
 
-FORM = "Please fill out this form:"
+FORM = """Climatservice:
+
+Dobar dan. Servisiramo auto i kućne klima uređaje.
+1. Koja usluga vas konkretno zanima?
+2. U kom gradu se nalazite?
+
+Здравствуйте. Мы обслуживаем автомобильные и домашние кондиционеры.
+1. Какая именно услуга вас интересует?
+2. В каком городе вы находитесь?
+
+Hello. We service car and home air conditioners.
+1. Which specific service are you interested in?
+2. Which city are you located in?"""
 
 
 class Bot:
