@@ -1,4 +1,3 @@
-import os
 import sqlite3
 from contextlib import asynccontextmanager
 
@@ -15,9 +14,7 @@ dotenv.load_dotenv()
 
 @asynccontextmanager
 async def lifespan(app: fastapi.FastAPI):
-    db = os.getenv("DATABASE_URL")
-    if db is None:
-        raise RuntimeError("DATABASE_URL is not set")
+    db = config.load_database_url()
     conn = sqlite3.connect(db, check_same_thread=False)
     utils.create_phones_table_if_not_exist(conn)
     repo = repositories.SQLiteRepository(conn)
@@ -68,8 +65,3 @@ async def verify_webhook(
     if params.get("hub.verify_token") == settings.whatsapp_verify_token:
         return fastapi.responses.PlainTextResponse(params.get("hub.challenge", ""))
     return fastapi.Response(status_code=status.HTTP_403_FORBIDDEN)
-
-
-#
-# if __name__ == "__main__":
-#     uvicorn.run(app)

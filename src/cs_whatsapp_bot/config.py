@@ -2,16 +2,20 @@ import os
 from dataclasses import dataclass
 
 
+def _require_env(name: str) -> str:
+    value = os.getenv(name)
+    if value is None or not value.strip():
+        raise RuntimeError(f"Missing required env var: {name}")
+    return value
+
+
 @dataclass
 class Settings:
     whatsapp_verify_token: str
 
 
 def load_settings() -> Settings:
-    value = os.getenv("WHATSAPP_VERIFY_TOKEN")
-    if value is None:
-        raise RuntimeError("Missing required env var: WHATSAPP_VERIFY_TOKEN")
-    return Settings(whatsapp_verify_token=value)
+    return Settings(whatsapp_verify_token=_require_env("WHATSAPP_VERIFY_TOKEN"))
 
 
 @dataclass
@@ -20,7 +24,8 @@ class SecuritySettings:
 
 
 def load_security_settings() -> SecuritySettings:
-    value = os.getenv("WHATSAPP_APP_SECRET")
-    if value is None:
-        raise RuntimeError("Missing required env var: WHATSAPP_APP_SECRET")
-    return SecuritySettings(whatsapp_app_secret=value)
+    return SecuritySettings(whatsapp_app_secret=_require_env("WHATSAPP_APP_SECRET"))
+
+
+def load_database_url() -> str:
+    return _require_env("DATABASE_URL")
