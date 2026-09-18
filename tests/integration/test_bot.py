@@ -3,6 +3,7 @@ import pytest_httpserver as server
 
 from src.cs_whatsapp_bot import Bot, HTTPX2Sender, SQLiteRepository
 
+
 @pytest.mark.anyio
 async def test_bot_can_send_message_to_remote_server(
         env_token,

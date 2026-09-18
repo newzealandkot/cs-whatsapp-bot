@@ -8,7 +8,6 @@ from fastapi import status
 
 from . import bot, config, repositories, schemas, security, senders, utils
 
-
 dotenv.load_dotenv()
 
 
@@ -17,6 +16,7 @@ async def lifespan(app: fastapi.FastAPI):
     db = config.load_database_url()
     conn = sqlite3.connect(db, check_same_thread=False)
     utils.create_phones_table_if_not_exist(conn)
+    utils.create_processed_messages_table_if_not_exist(conn)
     repo = repositories.SQLiteRepository(conn)
     sender = senders.HTTPX2Sender("localhost", 4000)
     app.state.get_bot = bot.Bot(repository=repo, sender=sender)

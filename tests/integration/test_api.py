@@ -8,7 +8,6 @@ from fastapi import status, testclient
 
 from src.cs_whatsapp_bot import app, bot, get_bot, repositories, senders
 
-
 LOCALHOST_URL = "http://localhost:8000"
 WEBHOOK_URL = LOCALHOST_URL + "/webhook"
 

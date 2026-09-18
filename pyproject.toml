@@ -1,0 +1,4 @@
+[tool.ruff.lint.flake8-bugbear]
+# FastAPI relies on calling Depends()/Query()/etc. as a parameter default —
+# that is how its dependency injection is declared, not a mutable-default bug.
+extend-immutable-calls = ["fastapi.Depends"]

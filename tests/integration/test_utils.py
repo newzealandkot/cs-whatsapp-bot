@@ -1,6 +1,6 @@
 import os
 
-from src.cs_whatsapp_bot import make_headers_from_env, utils
+from src.cs_whatsapp_bot import make_headers_from_env
 
 
 def test_make_headers_from_env():

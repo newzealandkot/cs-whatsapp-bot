@@ -1,14 +1,17 @@
 import httpx2
 
-from .import utils
+from . import utils
 
 
 class FakeMessageSender:
 
-    def __init__(self, host="localhost", port=8000):
+    def __init__(self, host="localhost", port=8000, should_fail=False):
         self.total_messages = 0
+        self.should_fail = should_fail
 
     async def send(self, message):
+        if self.should_fail:
+            raise RuntimeError("FakeMessageSender configured to fail")
         self.total_messages += 1
 
 

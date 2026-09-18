@@ -1,8 +1,17 @@
 import pydantic as pd
 import pytest
 
-from src.cs_whatsapp_bot import (Change, Contact, Entry, Message, Metadata,
-                                 Profile, Text, Value, WhatsAppWebhookEvent)
+from src.cs_whatsapp_bot import (
+    Change,
+    Contact,
+    Entry,
+    Message,
+    Metadata,
+    Profile,
+    Text,
+    Value,
+    WhatsAppWebhookEvent,
+)
 
 
 @pytest.fixture(params=[

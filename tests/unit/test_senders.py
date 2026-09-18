@@ -1,6 +1,6 @@
 import pytest
 
-from src.cs_whatsapp_bot import FakeMessageSender, FORM
+from src.cs_whatsapp_bot import FORM, FakeMessageSender
 
 
 @pytest.mark.anyio

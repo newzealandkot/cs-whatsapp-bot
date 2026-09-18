@@ -1,6 +1,4 @@
-from . import schemas
-from . import utils
-
+from . import schemas, utils
 
 FORM = """Climatservice:
 
@@ -25,10 +23,18 @@ class Bot:
         self.sender = sender
 
     async def send_message(self, event: schemas.WhatsAppWebhookEvent):
+        message_id = utils.extract_message_id_from_event(event)
+        if message_id is not None and not self.repo.try_claim_message(message_id):
+            return
         contact = utils.extract_contact_from_event(event)
         if contact is None:
             return
         if self.repo.get(contact) is None:
             payload = utils.build_output_payload(body=self.FORM, contact=contact)
-            await self.sender.send(payload)
+            try:
+                await self.sender.send(payload)
+            except Exception:
+                if message_id is not None:
+                    self.repo.release_message_claim(message_id)
+                raise
             self.repo.add(contact)

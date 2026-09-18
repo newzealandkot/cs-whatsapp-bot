@@ -2,7 +2,6 @@ import pytest
 
 from src.cs_whatsapp_bot import config
 
-
 BLANK_VALUES = [None, "", "   ", "\t\n"]
 
 

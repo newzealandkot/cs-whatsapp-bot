@@ -5,7 +5,6 @@ import pytest
 
 from src.cs_whatsapp_bot import FORM, WhatsAppWebhookEvent
 
-
 HTTPSERVER_HOST_PORT = ("localhost", 4000)
 TEST_SENDER_PHONE = "phone_number"
 
@@ -25,6 +24,12 @@ def sqlite_session():
         )
         """
     conn.execute(create_table_phones)
+    create_table_processed_messages = """
+        CREATE TABLE processed_messages (
+            message_id TEXT PRIMARY KEY
+        )
+        """
+    conn.execute(create_table_processed_messages)
     yield conn
     conn.close()
 
@@ -68,7 +73,7 @@ def expected_payload(recipient):
 @pytest.fixture
 def expected_headers():
     headers = {
-        "Authorization": f"Bearer test_token",
+        "Authorization": "Bearer test_token",
         "Content-Type": "application/json",
     }
     return headers

@@ -3,7 +3,6 @@ import hmac
 
 from src.cs_whatsapp_bot import security
 
-
 SECRET = "test_app_secret"
 BODY = b'{"object": "whatsapp_business_account"}'
 
