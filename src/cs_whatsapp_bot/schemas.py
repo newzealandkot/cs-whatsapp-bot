@@ -23,15 +23,23 @@ class Message(pd.BaseModel):
     from_: str = pd.Field(alias="from")
     id: str
     timestamp: str
-    text: Text
+    text: Text | None = None
     type: str
+
+
+class Status(pd.BaseModel):
+    id: str
+    status: str
+    timestamp: str
+    recipient_id: str
 
 
 class Value(pd.BaseModel):
     messaging_product: str
     metadata: Metadata
-    contacts: list[Contact]
-    messages: list[Message]
+    contacts: list[Contact] = []
+    messages: list[Message] = []
+    statuses: list[Status] = []
 
 
 class Change(pd.BaseModel):

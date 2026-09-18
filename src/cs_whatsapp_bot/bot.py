@@ -14,6 +14,8 @@ class Bot:
 
     async def send_message(self, event: schemas.WhatsAppWebhookEvent):
         contact = utils.extract_contact_from_event(event)
+        if contact is None:
+            return
         if self.repo.get(contact) is None:
             payload = utils.build_output_payload(body=self.FORM, contact=contact)
             await self.sender.send(payload)

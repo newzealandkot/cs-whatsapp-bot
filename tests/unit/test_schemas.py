@@ -70,6 +70,18 @@ def test_whatsapp_webhook_event_parses_valid_payload(webhook_payload):
     assert whatsapp_webhook_event.model_dump(by_alias=True) == webhook_payload
 
 
+def test_value_parses_status_only_payload(status_only_value_payload):
+    value = Value.model_validate(status_only_value_payload)
+    assert value.messages == []
+    assert value.contacts == []
+
+
+def test_message_parses_image_message_without_text(image_message_payload):
+    message = Message.model_validate(image_message_payload)
+    assert message.text is None
+    assert message.type == "image"
+
+
 def test_schema_rejects_invalid_payload(bad_payload, schema):
     with pytest.raises(pd.ValidationError):
         schema.model_validate(bad_payload)

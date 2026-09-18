@@ -2,7 +2,13 @@ import os
 
 
 def extract_contact_from_event(event):
-    return event.entry[0].changes[0].value.messages[0].from_
+    messages = event.entry[0].changes[0].value.messages
+    if not messages:
+        return None
+    message = messages[0]
+    if message.text is None:
+        return None
+    return message.from_
 
 
 def build_output_payload(*, contact, body):

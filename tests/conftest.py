@@ -35,6 +35,12 @@ def env_token(monkeypatch):
 
 
 @pytest.fixture
+def app_secret(monkeypatch):
+    monkeypatch.setenv("WHATSAPP_APP_SECRET", "test_app_secret")
+    return "test_app_secret"
+
+
+@pytest.fixture
 def remote_uri():
     return "/remote"
 
@@ -137,6 +143,7 @@ def value_payload(contact_payload, message_payload, metadata_payload):
         "metadata": metadata_payload,
         "contacts": [contact_payload],
         "messages": [message_payload],
+        "statuses": [],
     }
 
 
@@ -166,3 +173,75 @@ def webhook_payload(entry_payload):
 @pytest.fixture
 def webhook_event(webhook_payload):
     return WhatsAppWebhookEvent.model_validate(webhook_payload)
+
+
+@pytest.fixture
+def status_payload():
+    return {
+        "id": "wamid.status_id",
+        "status": "delivered",
+        "timestamp": "seconds",
+        "recipient_id": TEST_SENDER_PHONE,
+    }
+
+
+@pytest.fixture
+def status_only_value_payload(metadata_payload, status_payload):
+    return {
+        "messaging_product": "whatsapp",
+        "metadata": metadata_payload,
+        "statuses": [status_payload],
+    }
+
+
+@pytest.fixture
+def status_only_webhook_payload(status_only_value_payload):
+    return {
+        "object": "whatsapp_business_account",
+        "entry": [{
+            "id": "your_waba_id",
+            "changes": [{
+                "field": "messages",
+                "value": status_only_value_payload,
+            }],
+        }],
+    }
+
+
+@pytest.fixture
+def image_message_payload(recipient):
+    return {
+        "from": recipient,
+        "id": "whatsapp_message_id",
+        "timestamp": "seconds",
+        "type": "image",
+        "image": {
+            "id": "media-id",
+            "mime_type": "image/jpeg",
+            "sha256": "hash",
+        },
+    }
+
+
+@pytest.fixture
+def image_only_value_payload(contact_payload, image_message_payload, metadata_payload):
+    return {
+        "messaging_product": "whatsapp",
+        "metadata": metadata_payload,
+        "contacts": [contact_payload],
+        "messages": [image_message_payload],
+    }
+
+
+@pytest.fixture
+def image_only_webhook_payload(image_only_value_payload):
+    return {
+        "object": "whatsapp_business_account",
+        "entry": [{
+            "id": "your_waba_id",
+            "changes": [{
+                "field": "messages",
+                "value": image_only_value_payload,
+            }],
+        }],
+    }

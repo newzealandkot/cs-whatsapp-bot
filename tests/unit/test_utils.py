@@ -6,6 +6,18 @@ def test_extract_contact_from_event(recipient, webhook_event):
     assert contact == recipient
 
 
+def test_extract_contact_from_event_returns_none_for_status_only_event(status_only_webhook_payload):
+    event = WhatsAppWebhookEvent.model_validate(status_only_webhook_payload)
+    contact = utils.extract_contact_from_event(event)
+    assert contact is None
+
+
+def test_extract_contact_from_event_returns_none_for_non_text_message(image_only_webhook_payload):
+    event = WhatsAppWebhookEvent.model_validate(image_only_webhook_payload)
+    contact = utils.extract_contact_from_event(event)
+    assert contact is None
+
+
 def test_build_output_payload(expected_payload, recipient):
     payload = utils.build_output_payload(contact=recipient, body=FORM)
     assert payload == expected_payload

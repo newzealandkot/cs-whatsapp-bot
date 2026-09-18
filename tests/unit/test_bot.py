@@ -1,6 +1,6 @@
 import pytest
 
-from src.cs_whatsapp_bot import Bot, FakeMessageSender, FakeRepository, FORM
+from src.cs_whatsapp_bot import Bot, FakeMessageSender, FakeRepository, FORM, WhatsAppWebhookEvent
 
 
 def test_bot_has_message():
@@ -34,6 +34,26 @@ async def test_bot_sends_message_only_once_even_if_same_contact_writes_again(web
     await bot.send_message(webhook_event)
     await bot.send_message(webhook_event)
     assert sender.total_messages == 1
+
+
+@pytest.mark.anyio
+async def test_bot_does_nothing_for_status_only_event(status_only_webhook_payload):
+    event = WhatsAppWebhookEvent.model_validate(status_only_webhook_payload)
+    repo = FakeRepository()
+    sender = FakeMessageSender()
+    bot = Bot(repo, sender)
+    await bot.send_message(event)
+    assert sender.total_messages == 0
+
+
+@pytest.mark.anyio
+async def test_bot_does_not_send_form_for_non_text_message(image_only_webhook_payload):
+    event = WhatsAppWebhookEvent.model_validate(image_only_webhook_payload)
+    repo = FakeRepository()
+    sender = FakeMessageSender()
+    bot = Bot(repo, sender)
+    await bot.send_message(event)
+    assert sender.total_messages == 0
 
 
 # @pytest.fixture
