@@ -36,3 +36,21 @@ def test_release_message_claim_allows_reclaiming():
     repo.try_claim_message("message_id")
     repo.release_message_claim("message_id")
     assert repo.try_claim_message("message_id") is True
+
+
+def test_try_claim_contact_succeeds_for_new_phone():
+    repo = FakeRepository()
+    assert repo.try_claim_contact("phone_number") is True
+
+
+def test_try_claim_contact_fails_for_already_claimed_phone():
+    repo = FakeRepository()
+    repo.try_claim_contact("phone_number")
+    assert repo.try_claim_contact("phone_number") is False
+
+
+def test_release_contact_claim_allows_reclaiming():
+    repo = FakeRepository()
+    repo.try_claim_contact("phone_number")
+    repo.release_contact_claim("phone_number")
+    assert repo.try_claim_contact("phone_number") is True

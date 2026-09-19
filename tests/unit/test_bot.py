@@ -94,26 +94,6 @@ async def test_bot_releases_claim_and_allows_retry_when_send_fails(webhook_event
     assert sender.total_messages == 1
 
 
-class _RepositoryThatFailsToAddContact(FakeRepository):
-
-    def add(self, user):
-        raise RuntimeError("simulated repo.add failure")
-
-
-@pytest.mark.anyio
-async def test_bot_keeps_claim_when_repo_add_fails_after_successful_send(webhook_event):
-    repo = _RepositoryThatFailsToAddContact()
-    sender = FakeMessageSender()
-    bot = Bot(repo, sender)
-
-    with pytest.raises(RuntimeError):
-        await bot.send_message(webhook_event)
-    assert sender.total_messages == 1
-
-    await bot.send_message(webhook_event)
-    assert sender.total_messages == 1
-
-
 # @pytest.fixture
 # def bot():
 #     return Bot()

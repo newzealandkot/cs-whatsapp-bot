@@ -35,6 +35,26 @@ def sqlite_session():
 
 
 @pytest.fixture
+def sqlite_file_path(tmp_path):
+    path = str(tmp_path / "test.db")
+    conn = sqlite3.connect(path)
+    conn.execute("""
+        CREATE TABLE phones (
+            id INTEGER PRIMARY KEY,
+            phone TEXT NOT NULL UNIQUE
+        )
+        """)
+    conn.execute("""
+        CREATE TABLE processed_messages (
+            message_id TEXT PRIMARY KEY
+        )
+        """)
+    conn.commit()
+    conn.close()
+    return path
+
+
+@pytest.fixture
 def env_token(monkeypatch):
     monkeypatch.setenv("WHATSAPP_ACCESS_TOKEN", "test_token")
 

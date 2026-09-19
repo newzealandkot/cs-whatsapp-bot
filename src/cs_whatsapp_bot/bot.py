@@ -29,12 +29,13 @@ class Bot:
         contact = utils.extract_contact_from_event(event)
         if contact is None:
             return
-        if self.repo.get(contact) is None:
-            payload = utils.build_output_payload(body=self.FORM, contact=contact)
-            try:
-                await self.sender.send(payload)
-            except Exception:
-                if message_id is not None:
-                    self.repo.release_message_claim(message_id)
-                raise
-            self.repo.add(contact)
+        if not self.repo.try_claim_contact(contact):
+            return
+        payload = utils.build_output_payload(body=self.FORM, contact=contact)
+        try:
+            await self.sender.send(payload)
+        except Exception:
+            self.repo.release_contact_claim(contact)
+            if message_id is not None:
+                self.repo.release_message_claim(message_id)
+            raise

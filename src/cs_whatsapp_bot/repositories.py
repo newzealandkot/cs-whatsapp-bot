@@ -34,6 +34,15 @@ class FakeRepository:
     def release_message_claim(self, message_id):
         self._processed_messages.discard(message_id)
 
+    def try_claim_contact(self, phone):
+        if phone in self._users:
+            return False
+        self._users.add(phone)
+        return True
+
+    def release_contact_claim(self, phone):
+        self._users.discard(phone)
+
 
 class SQLiteRepository:
 
@@ -71,5 +80,24 @@ class SQLiteRepository:
         self.conn.execute(
             "DELETE FROM processed_messages WHERE message_id = ?",
             (message_id,),
+        )
+        self.conn.commit()
+
+    def try_claim_contact(self, phone):
+        try:
+            self.conn.execute(
+                "INSERT INTO phones (phone) VALUES (?)",
+                (phone,),
+            )
+            self.conn.commit()
+            return True
+        except sqlite3.IntegrityError:
+            self.conn.rollback()
+            return False
+
+    def release_contact_claim(self, phone):
+        self.conn.execute(
+            "DELETE FROM phones WHERE phone = ?",
+            (phone,),
         )
         self.conn.commit()
