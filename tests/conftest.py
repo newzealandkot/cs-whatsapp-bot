@@ -7,6 +7,8 @@ from src.cs_whatsapp_bot import FORM, WhatsAppWebhookEvent
 
 HTTPSERVER_HOST_PORT = ("localhost", 4000)
 TEST_SENDER_PHONE = "phone_number"
+TEST_PHONE_NUMBER_ID = "test_phone_number_id"
+TEST_ACCESS_TOKEN = "test_access_token"
 
 
 @pytest.fixture(scope="session")
@@ -55,19 +57,24 @@ def sqlite_file_path(tmp_path):
 
 
 @pytest.fixture
-def env_token(monkeypatch):
-    monkeypatch.setenv("WHATSAPP_ACCESS_TOKEN", "test_token")
-
-
-@pytest.fixture
 def app_secret(monkeypatch):
     monkeypatch.setenv("WHATSAPP_APP_SECRET", "test_app_secret")
     return "test_app_secret"
 
 
 @pytest.fixture
-def remote_uri():
-    return "/remote"
+def phone_number_id():
+    return TEST_PHONE_NUMBER_ID
+
+
+@pytest.fixture
+def access_token():
+    return TEST_ACCESS_TOKEN
+
+
+@pytest.fixture
+def remote_uri(phone_number_id):
+    return f"/{phone_number_id}/messages"
 
 
 @pytest.fixture
@@ -91,9 +98,9 @@ def expected_payload(recipient):
 
 
 @pytest.fixture
-def expected_headers():
+def expected_headers(access_token):
     headers = {
-        "Authorization": "Bearer test_token",
+        "Authorization": f"Bearer {access_token}",
         "Content-Type": "application/json",
     }
     return headers
@@ -114,6 +121,11 @@ def request_options(expected_headers, expected_payload, remote_uri):
 def test_server(httpserver, request_options):
     httpserver.expect_request(**request_options).respond_with_data("OK")
     return httpserver
+
+
+@pytest.fixture
+def base_url(test_server):
+    return f"http://{test_server.host}:{test_server.port}"
 
 
 @pytest.fixture(params=[

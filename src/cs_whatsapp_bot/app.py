@@ -18,7 +18,12 @@ async def lifespan(app: fastapi.FastAPI):
     utils.create_phones_table_if_not_exist(conn)
     utils.create_processed_messages_table_if_not_exist(conn)
     repo = repositories.SQLiteRepository(conn)
-    sender = senders.HTTPX2Sender("localhost", 4000)
+    sender_settings = config.load_sender_settings()
+    sender = senders.HTTPX2Sender(
+        phone_number_id=sender_settings.whatsapp_phone_number_id,
+        access_token=sender_settings.whatsapp_access_token,
+        api_version=sender_settings.whatsapp_api_version,
+    )
     app.state.get_bot = bot.Bot(repository=repo, sender=sender)
     yield
     conn.close()

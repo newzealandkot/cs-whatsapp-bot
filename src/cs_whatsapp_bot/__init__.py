@@ -17,4 +17,3 @@ from .schemas import WhatsAppWebhookEvent as WhatsAppWebhookEvent
 from .senders import FakeMessageSender as FakeMessageSender
 from .senders import HTTPX2Sender as HTTPX2Sender
 from .utils import build_output_payload as build_output_payload
-from .utils import make_headers_from_env as make_headers_from_env

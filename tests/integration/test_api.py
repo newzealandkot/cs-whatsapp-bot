@@ -21,7 +21,11 @@ def client():
 
 def get_test_bot():
     repo = repositories.FakeRepository()
-    sender = senders.HTTPX2Sender("localhost", 4000)
+    sender = senders.HTTPX2Sender(
+        phone_number_id="test_phone_number_id",
+        access_token="test_access_token",
+        base_url="http://localhost:4000",
+    )
     return bot.Bot(repository=repo, sender=sender)
 
 
@@ -39,7 +43,6 @@ def post_signed(client, url, payload, secret):
 async def test_webhook_endpoint_accepts_valid_signature_and_behaves_as_before(
         client,
         app_secret,
-        env_token,
         request_options,
         test_server,
         webhook_payload,
@@ -56,14 +59,17 @@ def test_webhook_endpoint_rejects_invalid_payload_request(client, app_secret, ba
 
 
 def test_endpoint_sends_only_one_message_per_unknown_contact(
+        access_token,
         client,
         app_secret,
+        base_url,
+        phone_number_id,
         sqlite_session,
         test_server,
         webhook_payload,
     ):
     repo = repositories.SQLiteRepository(sqlite_session)
-    sender = senders.HTTPX2Sender("localhost", 4000)
+    sender = senders.HTTPX2Sender(phone_number_id=phone_number_id, access_token=access_token, base_url=base_url)
     app.dependency_overrides[get_bot] = lambda: bot.Bot(repository=repo, sender=sender)
     post_signed(client, WEBHOOK_URL, webhook_payload, app_secret)
     post_signed(client, WEBHOOK_URL, webhook_payload, app_secret)

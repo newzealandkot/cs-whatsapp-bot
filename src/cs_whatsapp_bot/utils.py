@@ -1,6 +1,3 @@
-import os
-
-
 def extract_contact_from_event(event):
     messages = event.entry[0].changes[0].value.messages
     if not messages:
@@ -30,15 +27,6 @@ def build_output_payload(*, contact, body):
         },
     }
     return payload
-
-
-def make_headers_from_env():
-    token = os.getenv("WHATSAPP_ACCESS_TOKEN")
-    headers = {
-        "Authorization": f"Bearer {token}",
-        "Content-Type": "application/json",
-    }
-    return headers
 
 
 def create_phones_table_if_not_exist(conn):
